@@ -1,11 +1,11 @@
 using Microsoft.Data.SqlClient;
+using Tutorial9.Model.DTOs;
 
-namespace Tutorial9.Repositories;
+namespace Tutorial9.Repositories.Order;
 
 public interface IOrderRepository
 {
-    //Task<bool> OrderExistsAsync(int orderId);
-    Task<int> FindAvailableOrderAsync(int ammount, DateTime createdAt);
+    Task<int> FindAvailableOrderAsync(ProductWarehouseInsertDTO dto);
     Task<bool> FullfillOrderAsync(int orderId , SqlConnection connection,
         SqlTransaction transaction);
 }

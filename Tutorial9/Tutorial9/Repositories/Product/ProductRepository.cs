@@ -1,6 +1,6 @@
 using Microsoft.Data.SqlClient;
 
-namespace Tutorial9.Repositories;
+namespace Tutorial9.Repositories.Product;
 
 public class ProductRepository : IProductRepository
 {
@@ -10,23 +10,6 @@ public class ProductRepository : IProductRepository
     {
         _connectionString = configuration.GetConnectionString("Default");
     }
-    public async Task<bool> ProductExistsAsync(int productId)
-    {
-            await using var conn = new SqlConnection(_connectionString);
-            await conn.OpenAsync();
-
-            const string command = @"
-            SELECT 1 FROM Product
-            WHERE IdProduct = @IdProduct";
-
-            await using var cmd = new SqlCommand(command, conn);
-            cmd.Parameters.AddWithValue("@IdProduct", productId);
-
-            await using var reader = await cmd.ExecuteReaderAsync();
-            return await reader.ReadAsync();
-        
-    }
-    
     public async Task<decimal> GetProductPriceAsync(int productId)
     {
         var price = decimal.MinValue;

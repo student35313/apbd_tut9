@@ -1,6 +1,7 @@
 using Microsoft.Data.SqlClient;
+using Tutorial9.Model.DTOs;
 
-namespace Tutorial9.Repositories;
+namespace Tutorial9.Repositories.Order;
 
 public class OrderRepository : IOrderRepository
 {
@@ -10,27 +11,8 @@ public class OrderRepository : IOrderRepository
     {
         _connectionString = configuration.GetConnectionString("Default");
     }
-    /*
-    public async Task<bool> OrderExistsAsync(int orderId)
-    {
-        {
-            await using var conn = new SqlConnection(_connectionString);
-            await conn.OpenAsync();
 
-            const string command = @"
-            SELECT 1 FROM Order
-            WHERE IdOrder = @IdOrder";
-
-            await using var cmd = new SqlCommand(command, conn);
-            cmd.Parameters.AddWithValue("@IdOrder", orderId);
-
-            await using var reader = await cmd.ExecuteReaderAsync();
-            return await reader.ReadAsync();
-        }
-    }
-    */
-
-    public async Task<int> FindAvailableOrderAsync(int ammount, DateTime createdAt)
+    public async Task<int> FindAvailableOrderAsync(ProductWarehouseInsertDTO dto)
     {
         var orderId = -1;
         await using var conn = new SqlConnection(_connectionString);
@@ -47,8 +29,9 @@ public class OrderRepository : IOrderRepository
             ORDER BY o.CreatedAt ASC;";
 
         await using var cmd = new SqlCommand(command, conn);
-        cmd.Parameters.AddWithValue("@Amount", ammount);
-        cmd.Parameters.AddWithValue("@CreatedAt", createdAt);
+        cmd.Parameters.AddWithValue("@Amount", dto.Amount);
+        cmd.Parameters.AddWithValue("@IdProduct", dto.IdProduct);
+        cmd.Parameters.AddWithValue("@CreatedAt", dto.CreatedAt);
 
         await using var reader = await cmd.ExecuteReaderAsync();
         if (await reader.ReadAsync())

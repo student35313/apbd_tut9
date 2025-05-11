@@ -1,4 +1,4 @@
-namespace Tutorial9.Repositories;
+namespace Tutorial9.Repositories.Warehouse;
 
 public interface IWarehouseRepository
 {

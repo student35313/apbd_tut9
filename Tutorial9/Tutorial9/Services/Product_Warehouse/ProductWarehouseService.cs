@@ -1,9 +1,12 @@
 using Microsoft.Data.SqlClient;
 using Tutorial9.Exceptions;
 using Tutorial9.Model.DTOs;
-using Tutorial9.Repositories;
+using Tutorial9.Repositories.Order;
+using Tutorial9.Repositories.Product_Warehouse;
+using Tutorial9.Repositories.Product;
+using Tutorial9.Repositories.Warehouse;
 
-namespace Tutorial9.Services;
+namespace Tutorial9.Services.Product_Warehouse;
 
 public class ProductWarehouseService : IProductWarehouseService
 {

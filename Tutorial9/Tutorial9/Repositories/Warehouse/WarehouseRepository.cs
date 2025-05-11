@@ -1,6 +1,6 @@
 using Microsoft.Data.SqlClient;
 
-namespace Tutorial9.Repositories;
+namespace Tutorial9.Repositories.Warehouse;
 
 public class WarehouseRepository : IWarehouseRepository
 {

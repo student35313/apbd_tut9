@@ -1,7 +1,7 @@
 using Tutorial9.Model.DTOs;
 using Tutorial9.Repositories;
 
-namespace Tutorial9.Services;
+namespace Tutorial9.Services.Product_Warehouse;
 
 public interface IProductWarehouseService
 {

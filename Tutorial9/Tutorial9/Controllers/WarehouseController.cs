@@ -2,17 +2,17 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Tutorial9.Exceptions;
 using Tutorial9.Model.DTOs;
-using Tutorial9.Services;
+using Tutorial9.Services.Product_Warehouse;
 
 namespace Tutorial9.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class ProductWarehouseController : ControllerBase
+public class WarehouseController : ControllerBase
 {
     IProductWarehouseService _service;
 
-    public ProductWarehouseController(IProductWarehouseService service)
+    public WarehouseController(IProductWarehouseService service)
     {
         _service = service;
     }

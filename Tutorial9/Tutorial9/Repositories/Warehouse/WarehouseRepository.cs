@@ -10,21 +10,20 @@ public class WarehouseRepository : IWarehouseRepository
     {
         _connectionString = configuration.GetConnectionString("Default");
     }
-    public async Task<bool> WarehouseExistsAsync(int warehouseId)
+    public async Task<bool> WarehouseExistsAsync(int? warehouseId, SqlConnection connection)
     {
         
-            await using var conn = new SqlConnection(_connectionString);
-            await conn.OpenAsync();
-
             const string command = @"
             SELECT 1 FROM Warehouse
             WHERE IdWarehouse = @IdWarehouse";
 
-            await using var cmd = new SqlCommand(command, conn);
+            await using var cmd = new SqlCommand(command, connection);
             cmd.Parameters.AddWithValue("@IdWarehouse", warehouseId);
 
             await using var reader = await cmd.ExecuteReaderAsync();
             return await reader.ReadAsync();
+            
+            
         
     }
 }

@@ -5,7 +5,7 @@ namespace Tutorial9.Repositories.Order;
 
 public interface IOrderRepository
 {
-    Task<int> FindAvailableOrderAsync(ProductWarehouseInsertDTO dto);
+    Task<int> FindAvailableOrderAsync(ProductWarehouseInsertDTO dto , SqlConnection connection);
     Task<bool> FullfillOrderAsync(int orderId , SqlConnection connection,
         SqlTransaction transaction);
 }

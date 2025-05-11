@@ -10,18 +10,16 @@ public class ProductRepository : IProductRepository
     {
         _connectionString = configuration.GetConnectionString("Default");
     }
-    public async Task<decimal> GetProductPriceAsync(int productId)
+    public async Task<decimal> GetProductPriceAsync(int? productId, SqlConnection connection)
     {
         var price = decimal.MinValue;
-        await using var conn = new SqlConnection(_connectionString);
-        await conn.OpenAsync();
-
+        
         const string command = @"
             SELECT Price FROM Product
             WHERE IdProduct = @IdProduct;
             ";
         
-        await using var cmd = new SqlCommand(command, conn);
+        await using var cmd = new SqlCommand(command, connection);
         cmd.Parameters.AddWithValue("@IdProduct", productId);
 
         await using var reader = await cmd.ExecuteReaderAsync();

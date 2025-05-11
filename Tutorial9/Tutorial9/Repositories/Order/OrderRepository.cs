@@ -12,12 +12,10 @@ public class OrderRepository : IOrderRepository
         _connectionString = configuration.GetConnectionString("Default");
     }
 
-    public async Task<int> FindAvailableOrderAsync(ProductWarehouseInsertDTO dto)
+    public async Task<int> FindAvailableOrderAsync(ProductWarehouseInsertDTO dto, SqlConnection connection)
     {
         var orderId = -1;
-        await using var conn = new SqlConnection(_connectionString);
-        await conn.OpenAsync();
-
+        
         const string command = @"
             SELECT TOP 1 o.IdOrder
             FROM [Order] o
@@ -28,7 +26,7 @@ public class OrderRepository : IOrderRepository
             AND pw.IdOrder IS NULL
             ORDER BY o.CreatedAt ASC;";
 
-        await using var cmd = new SqlCommand(command, conn);
+        await using var cmd = new SqlCommand(command, connection);
         cmd.Parameters.AddWithValue("@Amount", dto.Amount);
         cmd.Parameters.AddWithValue("@IdProduct", dto.IdProduct);
         cmd.Parameters.AddWithValue("@CreatedAt", dto.CreatedAt);

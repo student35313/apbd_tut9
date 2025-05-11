@@ -25,9 +25,9 @@ public class WarehouseController : ControllerBase
             var id = await _service.AddProductToWarehouse(dto);
             return Created("", id);
         }
-        catch (BadHttpRequestException ex)
+        catch (NotFoundException ex)
         {
-            return BadRequest(ex.Message);
+            return NotFound(ex.Message);
         }
         catch (ConflictException ex)
         {

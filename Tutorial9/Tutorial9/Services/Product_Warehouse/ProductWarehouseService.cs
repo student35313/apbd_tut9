@@ -33,20 +33,22 @@ public class ProductWarehouseService : IProductWarehouseService
     {
         await using var conn = new SqlConnection(_connectionString);
         await conn.OpenAsync();
+        
+        if (!await _warehouseRepository.WarehouseExistsAsync(dto.IdWarehouse, conn))
+            throw new NotFoundException("Warehouse not found");
+            
+        var price = await _productRepository.GetProductPriceAsync(dto.IdProduct, conn);
+        if (price == decimal.MinValue)
+            throw new NotFoundException("Product not found");
+            
+        var orderId = await _orderRepository.FindAvailableOrderAsync(dto, conn);
+        if (orderId == -1)
+            throw new ConflictException("No available orders to fullfill");
+        
         await using var transaction = conn.BeginTransaction();
         
         try
         {
-            if (!await _warehouseRepository.WarehouseExistsAsync(dto.IdWarehouse))
-                throw new BadHttpRequestException("Warehouse not found");
-            
-            var price = await _productRepository.GetProductPriceAsync(dto.IdProduct);
-            if (price == decimal.MinValue)
-                throw new BadHttpRequestException("Product not found");
-            
-            var orderId = await _orderRepository.FindAvailableOrderAsync(dto);
-            if (orderId == -1)
-                throw new ConflictException("No available orders to fullfill");
             
             var fulfilled = await _orderRepository.FullfillOrderAsync(orderId, conn, transaction);
             if (!fulfilled)
